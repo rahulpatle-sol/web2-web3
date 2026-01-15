@@ -4,7 +4,7 @@ import { useState } from 'react';
 const skills = [
   { 
     name: "SOLANA / RUST", 
-    level: "95%", 
+    level: "80%", 
     category: "BLOCKCHAIN", 
     icon: "01",
     details: "Anchor Framework, PDA Architecture, CPIs, SVM Optimization",
@@ -12,7 +12,7 @@ const skills = [
   },
   { 
     name: "REACT / NEXT.JS", 
-    level: "98%", 
+    level: "80%", 
     category: "FRONTEND", 
     icon: "02",
     details: "Server Components, Framer Motion, State Orchestration",
@@ -33,7 +33,7 @@ export default function SkillVault() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
-    <section className="min-h-screen bg-[#050505] py-32 px-6 md:px-20 border-t border-white/5 relative overflow-hidden">
+    <section className="min-h-screen bg-[#0505051a] py-32 px-6 md:px-20 border-t border-white/5 relative overflow-hidden">
       
       {/* 1. SECTION HEADER (Sheryians Style) */}
       <div className="relative z-10 mb-32 flex flex-col md:flex-row justify-between items-end gap-10">

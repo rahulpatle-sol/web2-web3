@@ -17,10 +17,10 @@ export default function Footer() {
 
   // Dynamic Colors based on Mode
   const isWeb3 = mode === 'web3';
-  const bgColor = isWeb3 ? 'bg-[#050505]' : 'bg-white';
-  const textColor = isWeb3 ? 'text-white' : 'text-black';
+  const bgColor = isWeb3 ? 'bg-[#050505]' : 'bg-transparent';
+  const textColor = isWeb3 ? 'text-white' : 'text-white';
   const borderColor = isWeb3 ? 'border-white/10' : 'border-black/10';
-  const accentColor = isWeb3 ? 'text-[#14F195]' : 'text-blue-600';
+  const accentColor = isWeb3 ? 'text-white' : 'text-blue-600';
 
   return (
     <footer className={`relative w-full ${bgColor} ${textColor} py-20 px-6 md:px-20 overflow-hidden transition-colors duration-700`}>

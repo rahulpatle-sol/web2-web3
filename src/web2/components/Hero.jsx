@@ -1,69 +1,108 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 
 export default function Hero() {
+  const containerRef = useRef(null);
+
+  // Scroll Progress track karne ke liye
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Parallax Logic: Alag alag speed ke liye transformations
+  const yTextBack = useTransform(scrollYProgress, [0, 1], [0, -200]); // Piche wala text upar jayega
+  const yTextFront = useTransform(scrollYProgress, [0, 1], [0, 200]); // Aage wala text niche jayega
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]); // Image zoom hogi
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]); // Scroll pe fade out
+
   return (
-    <section className="relative h-screen w-full bg-transparent overflow-hidden flex flex-col justify-between p-6 md:p-12 text-white">
+    <section 
+      ref={containerRef}
+      className="relative h-screen w-full bg-[#00000004] overflow-hidden flex flex-col justify-between p-8 md:p-12 text-white"
+    >
       
       {/* 1. TOP NAV */}
-      <div className="flex justify-between items-start z-50 font-mono text-[10px] tracking-widest uppercase opacity-70">
-        <div className="flex flex-col">
-          <span>RAHUL PATLE</span>
-          <span className="text-[#14F195]">SYS_ARCHITECTURE</span>
-        </div>
-        <div className="flex gap-8">
-          <span className="hover:line-through cursor-pointer italic">VAULT</span>
-          <span className="hover:line-through cursor-pointer italic">PROJECTS</span>
-        </div>
-      </div>
+      
 
-      {/* 2. CENTER PIECE */}
-      <div className="absolute inset-0 flex justify-center items-center pointer-events-none overflow-hidden">
-        <h1 className="absolute text-[22vw] font-black italic tracking-tighter text-white opacity-5 whitespace-nowrap z-0">
-          CREATIVE DEVELOPER
-        </h1>
-
+      {/* 2. CENTER COMPOSITION (Parallax Heart) */}
+      <div className="relative flex justify-center items-center flex-1">
+        
+        {/* Layer 1: Ghost Text (Background) */}
         <motion.div 
-          initial={{ scale: 1.2, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-[70vw] h-[60vh] md:w-[30vw] md:h-[70vh] z-10"
+          style={{ y: yTextBack }}
+          className="absolute z-0 flex flex-col items-center opacity-10 pointer-events-none"
         >
-          <div className="absolute -inset-4 border border-white/10 -z-10" />
-          <img 
-            src="https://media.istockphoto.com/id/2160850994/photo/asian-software-developers-working-on-multiple-screens-displaying-code-and-application.webp?a=1&b=1&s=612x612&w=0&k=20&c=IDY__FXpAaireo52edTqK9aEQSV9BqNaGjsZkLyf5xI="
-            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
-            alt="Rahul Patle"
-          />
+          <h1 className="text-[18vw] font-black italic tracking-tighter uppercase leading-none">SYSTEMS</h1>
         </motion.div>
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center z-20">
-          <motion.div 
-             initial={{ y: 100, opacity: 0 }}
-             animate={{ y: 0, opacity: 1 }}
-             transition={{ delay: 0.5, duration: 1.5 }}
-             className="flex flex-col items-center"
+        {/* Layer 2: Image Block (Middle) */}
+        <motion.div 
+          initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+          animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ scale: imageScale }}
+          className="relative w-[280px] h-[380px] md:w-[400px] md:h-[500px] z-10 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]"
+        >
+          <img 
+            src="https://ik.imagekit.io/y8vbhvt7s/persenal%20fun%20stuff%20/image.jpg?updatedAt=1768501411754" 
+            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-110"
+            alt="Rahul Patle"
+          />
+          {/* Subtle Scanline Overlay for Tech vibe */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20" />
+        </motion.div>
+
+        {/* Layer 3: Main Bold Typography (Foreground) */}
+        <motion.div 
+          style={{ y: yTextFront }}
+          className="absolute inset-0 flex flex-col justify-center items-center z-20 pointer-events-none mix-blend-difference"
+        >
+          <motion.h1 
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-[14vw] leading-[0.75] font-black italic tracking-tighter text-white"
           >
-            <h1 className="text-[12vw] md:text-[14vw] leading-[0.75] font-black italic text-white mix-blend-difference">HELLO</h1>
-            <h1 className="text-[12vw] md:text-[14vw] leading-[0.75] font-black italic text-[#14F195] mix-blend-difference">RAHUL</h1>
-            <h1 className="text-[12vw] md:text-[14vw] leading-[0.75] font-black italic text-white mix-blend-difference ml-10">PATLE</h1>
-          </motion.div>
-        </div>
+            HELLO
+          </motion.h1>
+          <motion.h1 
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.7, duration: 1 }}
+            className="text-[14vw] leading-[0.75] font-black italic tracking-tighter text-[#14F195]"
+          >
+            I'M RAHUL
+          </motion.h1>
+          <motion.h1 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.9, duration: 1 }}
+            className="text-[14vw] leading-[0.75] font-black italic tracking-tighter text-white md:ml-40"
+          >
+            PATLE
+          </motion.h1>
+        </motion.div>
       </div>
 
       {/* 3. BOTTOM INFO */}
-      <div className="flex flex-col md:flex-row justify-between items-end z-50 font-mono text-[9px] uppercase tracking-widest">
-        <div className="max-w-[250px] opacity-50 mb-4 md:mb-0">
-           BLOCKCHAIN ENGINEER / BUILDING <br /> HIGH-PERFORMANCE SMART CONTRACTS
+      <motion.div style={{ opacity }} className="flex justify-between items-end z-30 font-mono text-[10px] uppercase tracking-widest">
+        <div className="max-w-[250px] leading-relaxed opacity-50 flex flex-col gap-2">
+          <div className="w-8 h-[1px] bg-white" />
+          <span>CODE ARCHITECT & DESIGNER EXPLORING VIBRANT DIGITAL WORLDS.</span>
         </div>
-        <div className="flex flex-col items-center opacity-80">
-          <div className="w-px h-12 bg-white mb-4" />
-          <span>SCROLL TO ENTER</span>
+        <div className="text-center hidden md:block">
+          <span className="text-gray-500">BASED IN</span> <br /> 
+          <span className="text-[#14F195]">MUMBAI, INDIA</span>
         </div>
-        <div className="text-right">
-          <span className="text-[#14F195]">EST. 2024</span><br/>
-          <span className="opacity-40">INDIA_NODE_01</span>
+        <div className="opacity-50 flex items-center gap-4">
+           <span>VERIFIED_2024</span>
+           <div className="w-2 h-2 rounded-full bg-[#14F195] animate-pulse" />
         </div>
-      </div>
+      </motion.div>
+
+      {/* Background Noise Texture */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </section>
   );
 }

@@ -56,7 +56,7 @@ export default function Capabilities() {
     <section 
       ref={containerRef} 
       className={`min-h-screen w-full py-32 relative overflow-hidden transition-colors duration-1000 ${
-        isWeb3 ? 'bg-[#050505] text-white' : 'bg-[#fafafa] text-black'
+        isWeb3 ? 'bg-[#05050500] text-white' : 'bg-[#00000029] text-white'
       }`}
     >
       
@@ -76,7 +76,7 @@ export default function Capabilities() {
           >
             Modular_Skills
           </motion.span>
-          <h2 className="text-6xl md:text-[10vw] font-black leading-none tracking-tighter uppercase mt-4">
+          <h2 className="text-6xl md:text-[10vw]  leading-none tracking-tighter uppercase mt-4">
             SYSTEM<br/>CAPS<span className={`${isWeb3 ? 'text-[#14F195]' : 'text-[#9945FF]'} font-light animate-pulse`}>_</span>
           </h2>
         </div>
@@ -90,7 +90,7 @@ export default function Capabilities() {
               }`}
             >
               {/* Number Index */}
-              <div className={`text-[15vw] font-black leading-none select-none font-clash italic transition-colors ${
+              <div className={`text-[15vw] font-lite  leading-none select-none italic transition-colors ${
                 isWeb3 ? 'text-white/5' : 'text-black/5'
               }`}>
                 0{index + 1}

@@ -8,6 +8,7 @@ import ConnectProtocol from './components/ConnectProtocol';
 import ProjectNodes from './components/ProjectNodes';
 import NFTVault from './components/NFTVault';
 import Web3Loader from '../shared/Web3Loader'; // Import Loader
+import Footer from '../shared/Footer';
 
 export default function Web3Layout() {
   const [isBooting, setIsBooting] = useState(true);
@@ -103,6 +104,7 @@ export default function Web3Layout() {
         <ProjectNodes/>
         <NFTVault/>
         <AIAgentCore />
+        <Footer/>
       </main>
 
       {/* 3. Ultra-Premium Background Effects */}

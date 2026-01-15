@@ -43,7 +43,7 @@ export default function Experience() {
 
   return (
     <section className={`relative min-h-screen py-32 px-6 md:px-20 border-t transition-colors duration-1000 overflow-hidden ${
-      isWeb3 ? 'bg-[#030303] border-white/5' : 'bg-white border-black/5'
+      isWeb3 ? 'bg-transparent border-white/5' : 'bg-transparent border-black/5'
     }`}>
       
       {/* --- SOLANA BACKGROUND ELEMENTS --- */}

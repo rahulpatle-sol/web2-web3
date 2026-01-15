@@ -9,7 +9,7 @@ const beliefs = [
 
 export default function Vision() {
   return (
-    <section className="w-full bg-[#050505] py-20 md:py-40 px-6 md:px-20 relative overflow-hidden">
+    <section className="w-full bg-transparent py-20 md:py-40 px-6 md:px-20 relative overflow-hidden">
       
       {/* 1. HORIZONTAL MARQUEE (Chalta hua text) */}
       <div className="absolute top-0 left-0 w-full py-4 border-b border-white/5 overflow-hidden flex whitespace-nowrap opacity-20">
