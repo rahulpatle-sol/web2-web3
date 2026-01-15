@@ -1,20 +1,25 @@
-import Hero from './components/Hero';
+import HeroPremium from './components/Hero';
 import Vision from './components/Vision';
 import SkillVault from './components/SkillVault';
 import TheLab from './components/TheLab';
 import Capabilities from './components/Capabilities';
+import Experience from './components/Experience';
+import Bridge from '../shared/Bridge';
+import Footer from '../shared/Footer';
 
 export default function Web2Layout() {
   return (
     <div className="w-full">
-      <Hero />
+      <HeroPremium />
       <Vision />
+      <Experience/>
       <SkillVault />
       <TheLab />
+
       <Capabilities />
-      <footer className="py-20 bg-black text-center font-mono text-xs text-gray-600 tracking-widest">
-        © 2024 PORTFOLIO_V2 // BUILT WITH DEGEN ENERGY
-      </footer>
+      <Bridge/>
+
+   <Footer/>
     </div>
   );
 } 

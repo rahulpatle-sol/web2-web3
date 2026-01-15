@@ -1,101 +1,129 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
+import '@solana/wallet-adapter-react-ui/styles.css';
 
-// Store & Layouts
+import studio from '@theatre/studio';
+import extension from '@theatre/r3f/dist/extension';
+
 import { useUniverse } from './store/useUniverse';
-import Web2Layout from './web2/web2Layout'; // Corrected case (web2Layout -> Web2La
+import Web2Layout from './web2/web2Layout'; 
 import Web3Layout from './web3/web3Layout';
 
-// Shared Components
 import SharedCanvas from './shared/SharedCanvas';
 import UniverseToggle from './shared/UIniversToggle';
+import AudioManager from './shared/AudioManger';
+import ClothNavbar from './shared/ClothNavbar';
+import LiquidCursor from './shared/LiquideCursor';
+import CustomCursor from './shared/CustomCursor';
 
-import AudioManager from './shared/AudioManger';// 
-
-// Animation & Interaction
 import Lenis from '@studio-freight/lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// --- STUDIO FIX: Sirf Dev mode mein initialize hoga aur hidden rahega ---
+if (import.meta.env.DEV) {
+  studio.initialize();
+  studio.extend(extension);
+  // Default hidden rakhte hain taaki UI na block ho. 
+  // Browser mein 'H' dabao panel dikhne lagega.
+  studio.ui.hide(); 
+}
+
 function App() {
   const { mode } = useUniverse();
+  
+  // Solana Setup
+  const endpoint = useMemo(() => clusterApiUrl('devnet'), []);
+  const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
-  // 1. Initialize Smooth Scroll (Lenis)
+  // Smooth Scroll (Lenis) setup
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    const lenis = new Lenis({ 
+      duration: 1.2, 
       smoothWheel: true,
+      wheelMultiplier: 1,
+      infinite: false,
     });
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    function raf(time) { 
+      lenis.raf(time); 
+      requestAnimationFrame(raf); 
     }
-    requestAnimationFrame(raf);
-
-    lenis.on('scroll', ScrollTrigger.update);
     
-    // GSAP Ticker synchronization
-    const gsapTicker = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(gsapTicker);
-
-    return () => {
-      lenis.destroy();
-      gsap.ticker.remove(gsapTicker);
-    };
-  }, []);
-
-  // 2. Custom Cursor Logic (Adding movement)
-  useEffect(() => {
-    const cursor = document.getElementById('custom-cursor');
-    const moveCursor = (e) => {
-      gsap.to(cursor, {
-        x: e.clientX - 16,
-        y: e.clientY - 16,
-        duration: 0.5,
-        ease: "power3.out"
-      });
-    };
-    window.addEventListener('mousemove', moveCursor);
-    return () => window.removeEventListener('mousemove', moveCursor);
+    requestAnimationFrame(raf);
+    return () => lenis.destroy();
   }, []);
 
   return (
-    <div className={`relative min-h-screen ${mode === 'web3' ? 'bg-black text-white' : 'bg-white text-black'} transition-colors duration-700`}>
-      
-      {/* Background Music Controller */}
-      <AudioManager /> 
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <div className={`relative min-h-screen ${
+            mode === 'web3' ? 'bg-[#050505] text-white' : 'bg-[#fafafa] text-black'
+          } transition-colors duration-1000 overflow-x-hidden`}>
+            
+            {/* Audio Management */}
+            <AudioManager /> 
 
-      {/* Global Canvas */}
-      <SharedCanvas />
+            {/* Global 3D Canvas */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <SharedCanvas>
+                  <Suspense fallback={null}>
+                      <LiquidCursor />
+                      
+                      {/* --- Safe 3D Mesh --- */}
+                      <mesh position={[2, 0, 0]} rotation={[0.5, 0.5, 0]}>
+                        <torusKnotGeometry args={[1, 0.3, 128, 32]} />
+                        <meshStandardMaterial 
+                          color={mode === 'web3' ? "#14F195" : "#4A90E2"} 
+                          metalness={0.8} 
+                          roughness={0.1} 
+                        />
+                      </mesh>
+                      <ambientLight intensity={0.5} />
+                      <directionalLight position={[10, 10, 5]} intensity={1} />
+                  </Suspense>
+              </SharedCanvas>
+            </div>
 
-      {/* Universe Switcher UI */}
-      <UniverseToggle />
+            {/* Navigation & Toggle */}
+            <ClothNavbar />
+            <div className="fixed top-8 right-8 z-[1000]">
+                <UniverseToggle />
+            </div>
 
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={mode}
-          initial={{ opacity: 0, filter: "blur(20px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, filter: "blur(20px)" }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          {/* Main Layouts */}
-          {mode === 'web2' ? <Web2Layout /> : <Web3Layout />}
-        </motion.main>
-      </AnimatePresence>
+            {/* Layout Switching with Animation */}
+            <AnimatePresence mode="wait">
+              <motion.main
+                key={mode}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.6, ease: "circOut" }}
+                className="relative z-10"
+              >
+                {mode === 'web2' ? <Web2Layout /> : <Web3Layout />}
+              </motion.main>
+            </AnimatePresence>
 
-      {/* Custom Cursor */}
-      <div 
-        className="fixed top-0 left-0 w-8 h-8 border-2 border-current rounded-full pointer-events-none z-[999] mix-blend-difference" 
-        id="custom-cursor" 
-      />
-    </div>
+            {/* UI Polish */}
+            <CustomCursor />
+            {/* Overlay Gradient for depth */}
+            <div className={`fixed inset-0 pointer-events-none z-[9998] ${
+                mode === 'web3' 
+                ? 'shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]' 
+                : 'shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]'
+            }`} />
+          </div>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }
 

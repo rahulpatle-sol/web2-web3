@@ -1,28 +1,52 @@
 import { motion } from 'framer-motion';
 import TerminalConsole from './components/TerminalConsole';
 import AIAgentCore from './components/AIAgentCore';
-import VaultSocials from './components/VaultSocials';
+import VaultSocials from './components/VaultSocial';
+import HeroWeb3 from './components/HeroWeb3'; // Naya component
+import ConnectProtocol from './components/ConnectProtocol'; // Wallet Button
+import ProjectNodes from './components/ProjectNodes';
 
 export default function Web3Layout() {
   return (
-    <div className="relative overflow-hidden">
-      {/* 3D Background Elements should be here via SharedCanvas */}
+    <div className="relative min-h-screen bg-[#050505] text-[#14F195] font-mono selection:bg-[#9945FF] selection:text-white overflow-x-hidden">
       
-      <main className="relative z-10 max-w-7xl mx-auto px-6 pt-32">
-        {/* Row 1: Hero & Terminal */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-32">
+      {/* 1. Top Navigation Bar (Premium Feel) */}
+      <nav className="fixed top-0 w-full z-[100] p-6 flex justify-between items-center backdrop-blur-md border-b border-[#14F195]/10">
+        <motion.div 
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="font-black italic text-xl tracking-tighter"
+        >
+          RAHUL_PATLE.SYS
+        </motion.div>
+        <ConnectProtocol />
+      </nav>
+
+      {/* 2. Main Content */}
+      <main className="relative z-10 container mx-auto px-6">
+        
+        {/* Row 1: The Liquid Hero Section */}
+        <section className="min-h-screen flex flex-col justify-center">
+          <HeroWeb3 /> 
+        </section>
+
+        {/* Row 2: Terminal & Identity */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 my-32 items-center">
           <div className="lg:col-span-7">
-            <motion.h2 
-              initial={{ opacity: 0, skewX: 20 }}
-              whileInView={{ opacity: 1, skewX: 0 }}
-              className="text-[12vw] lg:text-[8vw] font-black leading-none uppercase italic text-transparent stroke-text"
-              style={{ WebkitTextStroke: '1px #14F195' }}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
             >
-              DEGEN <br /> ARCHITECT
-            </motion.h2>
-            <p className="mt-8 text-xl text-[#9945FF] font-mono uppercase tracking-[0.5em]">
-              The Ledger never lies.
-            </p>
+              <h2 className="text-[10vw] lg:text-[7vw] font-black leading-[0.85] uppercase italic glitch-text-effect">
+                Shadow <br /> Architect
+              </h2>
+              <div className="h-1 w-20 bg-[#9945FF] my-6"></div>
+              <p className="text-gray-400 max-w-md text-sm md:text-base leading-relaxed">
+                Developing high-performance decentralized protocols. Specializing in Solana Core, 
+                Rust, and Advanced Web3 UI/UX for the next billion degens.
+              </p>
+            </motion.div>
           </div>
           
           <div className="lg:col-span-5">
@@ -30,22 +54,34 @@ export default function Web3Layout() {
           </div>
         </div>
 
-        {/* Row 2: Vault Section */}
-        <div className="mb-32">
-           <div className="text-center mb-10">
-              <h3 className="text-4xl font-black uppercase tracking-tighter italic">Secured Assets</h3>
-              <p className="text-gray-500 font-mono text-sm">Transfer 0.1 SOL to decrypt social coordinates</p>
+        {/* Row 3: The Vault (Paywall) */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="py-32 border-t border-[#14F195]/10"
+        >
+           <div className="text-center mb-16">
+              <span className="text-[#9945FF] text-xs font-bold tracking-[0.5em] uppercase">Security Protocol</span>
+              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mt-2">The Vault</h3>
+              <p className="text-gray-500 font-mono text-xs mt-4">Required: 0.1 SOL [DEVNET] to access encrypted social links</p>
            </div>
            <VaultSocials />
-        </div>
-
-        {/* AI Agent Floating component */}
+        </motion.div>
+ <ProjectNodes/>
+        {/* Floating AI Oracle */}
         <AIAgentCore />
       </main>
 
-      {/* Grid Overlay for Web3 vibe */}
-      <div className="fixed inset-0 pointer-events-none opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(#14F195 0.5px, transparent 0.5px)', backgroundSize: '20px 20px' }} />
+      {/* 3. Ultra-Premium Background Effects */}
+      <div className="fixed inset-0 pointer-events-none">
+        {/* Animated Scanline */}
+        <div className="absolute inset-0 bg-scanline opacity-[0.03]"></div>
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-10" 
+             style={{ backgroundImage: 'linear-gradient(#14F195 0.5px, transparent 0.5px), linear-gradient(90deg, #14F195 0.5px, transparent 0.5px)', backgroundSize: '50px 50px' }} />
+        {/* Vignette */}
+        <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,1)]"></div>
+      </div>
     </div>
   );
 }
