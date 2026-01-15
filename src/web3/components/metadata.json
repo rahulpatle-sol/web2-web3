@@ -1,0 +1,10 @@
+{
+  "name": "RAHUL_DEV_ARCHITECT",
+  "symbol": "RDV",
+  "description": "Exclusive Genesis NFT for Portfolio Visitors",
+  "image": "https://ik.imagekit.io/y8vbhvt7s/persenal%20fun%20stuff%20/image.jpg",
+  "attributes": [
+    { "trait_type": "Access", "value": "Early_Adopter" },
+    { "trait_type": "Level", "value": "99" }
+  ]
+}

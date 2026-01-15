@@ -1,16 +1,48 @@
+import React, { useState, useEffect } from 'react'; // React Hooks add kiye
 import { motion } from 'framer-motion';
 import TerminalConsole from './components/TerminalConsole';
 import AIAgentCore from './components/AIAgentCore';
 import VaultSocials from './components/VaultSocial';
-import HeroWeb3 from './components/HeroWeb3'; // Naya component
-import ConnectProtocol from './components/ConnectProtocol'; // Wallet Button
+import HeroWeb3 from './components/HeroWeb3'; 
+import ConnectProtocol from './components/ConnectProtocol'; 
 import ProjectNodes from './components/ProjectNodes';
+import NFTVault from './components/NFTVault';
+import Web3Loader from '../shared/Web3Loader'; // Import Loader
 
 export default function Web3Layout() {
+  const [isBooting, setIsBooting] = useState(true);
+
+  useEffect(() => {
+    // Web3 transition thoda slow aur "heavy" feel hona chahiye
+    const timer = setTimeout(() => {
+      setIsBooting(false);
+    }, 2000); // 2 seconds for that "fetching blocks" feel
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 1. Loading State (The Loader UI)
+  if (isBooting) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#050505] text-[#14F195]">
+        <Web3Loader />
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="mt-4 font-mono text-[10px] tracking-[0.5em] uppercase"
+        >
+          Establishing_Secure_Node...
+        </motion.p>
+      </div>
+    );
+  }
+
+  // 2. Final Web3 Content
   return (
-    <div className="relative min-h-screen bg-[#050505] text-[#14F195] font-mono selection:bg-[#9945FF] selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#050505] text-[#14F195] font-mono selection:bg-[#9945FF] selection:text-white overflow-x-hidden transition-opacity duration-1000">
       
-      {/* 1. Top Navigation Bar (Premium Feel) */}
+      {/* 1. Top Navigation Bar */}
       <nav className="fixed top-0 w-full z-[100] p-6 flex justify-between items-center backdrop-blur-md border-b border-[#14F195]/10">
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
@@ -54,7 +86,7 @@ export default function Web3Layout() {
           </div>
         </div>
 
-        {/* Row 3: The Vault (Paywall) */}
+        {/* Row 3: The Vault */}
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -67,19 +99,17 @@ export default function Web3Layout() {
            </div>
            <VaultSocials />
         </motion.div>
- <ProjectNodes/>
-        {/* Floating AI Oracle */}
+
+        <ProjectNodes/>
+        <NFTVault/>
         <AIAgentCore />
       </main>
 
       {/* 3. Ultra-Premium Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        {/* Animated Scanline */}
         <div className="absolute inset-0 bg-scanline opacity-[0.03]"></div>
-        {/* Grid Overlay */}
         <div className="absolute inset-0 opacity-10" 
              style={{ backgroundImage: 'linear-gradient(#14F195 0.5px, transparent 0.5px), linear-gradient(90deg, #14F195 0.5px, transparent 0.5px)', backgroundSize: '50px 50px' }} />
-        {/* Vignette */}
         <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,1)]"></div>
       </div>
     </div>
