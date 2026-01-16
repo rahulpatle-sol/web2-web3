@@ -20,7 +20,7 @@ const skills = [
   },
   { 
     name: "THREE.JS / GSAP", 
-    level: "90%", 
+    level: "60%", 
     category: "ANIMATION", 
     icon: "03",
     details: "Shader Materials, GLSL, Scroll-Triggered Narratives",

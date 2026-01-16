@@ -8,6 +8,7 @@ import Experience from './components/Experience';
 import Bridge from '../shared/Bridge';
 import Footer from '../shared/Footer';
 import Web2Loader from '../shared/Web2Loader';
+import ProjectsPage from './components/Projects';
 
 export default function Web2Layout() {
   const [loading, setLoading] = useState(true);
@@ -38,8 +39,11 @@ export default function Web2Layout() {
       <Experience />
       <SkillVault />
       <TheLab />
+      
       <Capabilities />
+<ProjectsPage />  
       <Bridge />
+ 
       <Footer />
     </div>
   );
